@@ -1,7 +1,9 @@
+// src/App.jsx
 import { Routes, Route, NavLink, useLocation } from "react-router-dom";
 import CreateBill from "./pages/CreateBill.jsx";
 import BillsList from "./pages/BillsList.jsx";
 import BillDetail from "./pages/BillDetail.jsx";
+import Dashboard from "./pages/Dashboard";
 import InvoicePrintPage from "./pages/InvoicePrintPage.jsx";
 import ReceiptPrintPage from "./pages/ReceiptPrintPage.jsx";
 
@@ -35,6 +37,19 @@ export default function App() {
 
         <nav className="flex-1 px-3 py-4 space-y-1 text-sm">
           <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              `block px-3 py-2 rounded-md ${
+                isActive
+                  ? "bg-slate-900 text-white"
+                  : "text-slate-700 hover:bg-slate-100"
+              }`
+            }
+          >
+            Dashboard
+          </NavLink>
+
+          <NavLink
             to="/new-bill"
             className={({ isActive }) =>
               `block px-3 py-2 rounded-md ${
@@ -65,7 +80,9 @@ export default function App() {
       {/* Main content */}
       <main className="flex-1 p-6">
         <Routes>
-          <Route path="/" element={<CreateBill />} />
+          {/* Default -> Dashboard */}
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/new-bill" element={<CreateBill />} />
           <Route path="/bills" element={<BillsList />} />
           <Route path="/bills/:id" element={<BillDetail />} />

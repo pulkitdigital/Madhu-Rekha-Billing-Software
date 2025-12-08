@@ -10,15 +10,15 @@ export default function CreateBill() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    patientName: "ROHIT",
+    patientName: "",
     address: "",
     age: "",
     date: new Date().toISOString().slice(0, 10),
     doctorReg1: "",
     doctorReg2: "",
     adjust: "0",
-    pay: "500",
-    paymentMode: "Cash",
+    pay: "0",
+    paymentMode: "Select",
     referenceNo: "",
     drawnOn: "",   // ✅ NEW
     drawnAs: "",   // ✅ NEW
