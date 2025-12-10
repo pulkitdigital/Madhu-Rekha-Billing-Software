@@ -4,6 +4,7 @@ import CreateBill from "./pages/CreateBill.jsx";
 import BillsList from "./pages/BillsList.jsx";
 import BillDetail from "./pages/BillDetail.jsx";
 import Dashboard from "./pages/Dashboard";
+import EditBill from "./pages/EditBill.jsx";
 import InvoicePrintPage from "./pages/InvoicePrintPage.jsx";
 import ReceiptPrintPage from "./pages/ReceiptPrintPage.jsx";
 
@@ -86,6 +87,8 @@ export default function App() {
           <Route path="/new-bill" element={<CreateBill />} />
           <Route path="/bills" element={<BillsList />} />
           <Route path="/bills/:id" element={<BillDetail />} />
+          <Route path="/bills/:id/edit" element={<EditBill />} />
+
         </Routes>
       </main>
     </div>

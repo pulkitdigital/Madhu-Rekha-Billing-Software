@@ -51,7 +51,7 @@ export default function BillsList() {
                   key={bill.id}
                   className="border-b border-slate-100 last:border-0"
                 >
-                  <td className="px-3 py-2">#{bill.id}</td>
+                  <td className="px-3 py-2">#{bill.invoiceNo}</td>
                   <td className="px-3 py-2">{bill.patientName}</td>
                   <td className="px-3 py-2">{bill.date}</td>
                   <td className="px-3 py-2 text-right">
@@ -78,7 +78,7 @@ export default function BillsList() {
                         {isPaid ? "Paid" : "Pending"}
                       </span>
 
-                      <div className="flex flex-wrap gap-1 justify-center mt-1">
+                      {/* <div className="flex flex-wrap gap-1 justify-center mt-1">
                         {!isPaid && (
                           <button
                             type="button"
@@ -89,7 +89,48 @@ export default function BillsList() {
                           </button>
                         )}
 
-                        {/* Invoice PDF */}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            window.open(
+                              `${API_BASE}/api/bills/${bill.id}/invoice-html-pdf`,
+                              "_blank"
+                            )
+                          }
+                          className="px-2 py-0.5 text-[11px] rounded border border-slate-300 hover:bg-slate-50"
+                        >
+                          Download Invoice
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => navigate(`/bills/${bill.id}`)}
+                          className="px-2 py-0.5 text-[11px] rounded border border-slate-300 hover:bg-slate-50"
+                        >
+                          Receipts / Refunds
+                        </button>
+                      </div> */}
+
+                      <div className="flex flex-wrap gap-1 justify-center mt-1">
+                        {/* NEW: Edit bill (non-payment) */}
+                        <button
+                          type="button"
+                          onClick={() => navigate(`/bills/${bill.id}/edit`)}
+                          className="px-2 py-0.5 text-[11px] rounded border border-blue-400 text-blue-700 hover:bg-blue-50"
+                        >
+                          Edit Bill
+                        </button>
+
+                        {!isPaid && (
+                          <button
+                            type="button"
+                            onClick={() => navigate(`/bills/${bill.id}`)}
+                            className="px-2 py-0.5 text-[11px] rounded border border-amber-400 text-amber-700 hover:bg-amber-50"
+                          >
+                            Pay / Refund
+                          </button>
+                        )}
+
                         <button
                           type="button"
                           onClick={() =>
