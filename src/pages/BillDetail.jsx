@@ -112,18 +112,20 @@ export default function BillDetail() {
           </button>
 
           {/* 🔵 NEW BUTTON — FULL PAYMENT PDF */}
-          <button
-            type="button"
-            onClick={() =>
-              window.open(
-                `${API_BASE}/api/bills/${bill.id}/full-payment-pdf`,
-                "_blank"
-              )
-            }
-            className="px-3 py-1.5 text-xs rounded border border-blue-400 text-blue-700 hover:bg-blue-50"
-          >
-            Full Payment PDF
-          </button>
+          {isPaid && (
+            <button
+              type="button"
+              onClick={() =>
+                window.open(
+                  `${API_BASE}/api/bills/${bill.id}/full-payment-pdf`,
+                  "_blank"
+                )
+              }
+              className="px-3 py-1.5 text-xs rounded border border-blue-400 text-blue-700 hover:bg-blue-50"
+            >
+              Full Payment PDF
+            </button>
+          )}
         </div>
       </div>
 
