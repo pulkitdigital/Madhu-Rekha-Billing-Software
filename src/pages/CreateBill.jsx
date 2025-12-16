@@ -8,6 +8,7 @@ export default function CreateBill() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
+    procedureDone: "",
     patientName: "",
     sex: "",
     address: "",
@@ -640,7 +641,19 @@ export default function CreateBill() {
 
       {/* Middle: Service rows (SIMPLIFIED as requested) */}
       <div className="bg-white rounded-lg shadow-sm p-4 space-y-3">
-        <h3 className="text-lg font-semibold">Procedure Done</h3>
+        <div className="flex  gap-4">
+          <h3 className="text-lg font-semibold">Procedure Done :-</h3>
+
+          <input
+            type="text"
+            name="procedureDone"
+            value={form.procedureDone}
+            onChange={handleFormChange}
+            className="w-84 border border-slate-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-slate-500"
+            placeholder="Cataract Surgery, Retina Check-up"
+          />
+        </div>
+
         <div className="flex items-center justify-between mb-1">
           <h4 className="text-sm font-semibold">Treatment Breakup Details</h4>
           <button

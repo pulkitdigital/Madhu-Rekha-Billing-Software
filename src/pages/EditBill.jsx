@@ -24,6 +24,7 @@ export default function EditBill() {
   const [error, setError] = useState("");
 
   const [form, setForm] = useState({
+    procedureDone: "",
     patientName: "",
     sex: "",
     address: "",
@@ -43,6 +44,7 @@ export default function EditBill() {
       try {
         const data = await apiFetch(`/api/bills/${id}`);
         setForm({
+          procedureDone: data.procedureDone || "",
           patientName: data.patientName || "",
           sex: data.sex || "",
           address: data.address || "",
@@ -86,7 +88,9 @@ export default function EditBill() {
 
   const handleServiceChange = (rowIdLocal, field, value) => {
     setServices((prev) =>
-      prev.map((row) => (row.id === rowIdLocal ? { ...row, [field]: value } : row))
+      prev.map((row) =>
+        row.id === rowIdLocal ? { ...row, [field]: value } : row
+      )
     );
   };
 
@@ -98,7 +102,9 @@ export default function EditBill() {
   };
 
   const removeServiceRow = (rowIdLocal) => {
-    setServices((prev) => (prev.length === 1 ? prev : prev.filter((r) => r.id !== rowIdLocal)));
+    setServices((prev) =>
+      prev.length === 1 ? prev : prev.filter((r) => r.id !== rowIdLocal)
+    );
   };
 
   // ---------- NUMERIC DERIVED VALUES ----------
@@ -115,11 +121,14 @@ export default function EditBill() {
 
   const handleSave = async () => {
     // clean internal-only fields before sending
-    const cleanedServices = servicesWithAmount.map(({ id, lineAmount, ...rest }) => rest);
+    const cleanedServices = servicesWithAmount.map(
+      ({ id, lineAmount, ...rest }) => rest
+    );
 
     const payload = {
       patientName: form.patientName,
       sex: form.sex,
+      procedureDone: form.procedureDone,
       address: form.address,
       age: form.age,
       date: form.date,
@@ -228,7 +237,19 @@ export default function EditBill() {
 
       {/* Services section now matches CreateBill's "Treatment Breakup Details" */}
       <div className="bg-white rounded-lg shadow-sm p-4 space-y-3">
-        <h3 className="text-lg font-semibold">Procedure Done</h3>
+        <div className="flex gap-4">
+          <h3 className="text-lg font-semibold">Procedure Done :-</h3>
+
+          <input
+            type="text"
+            name="procedureDone"
+            value={form.procedureDone}
+            onChange={handleFormChange}
+            className="w-84 border border-slate-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-slate-500"
+            placeholder="e.g. Cataract Surgery / Retina Check-up / Glaucoma Evaluation"
+          />
+        </div>
+
         <div className="flex items-center justify-between mb-1">
           <h4 className="text-sm font-semibold">Treatment Breakup Details</h4>
           <button
@@ -252,14 +273,21 @@ export default function EditBill() {
         {/* Rows (desktop) */}
         <div className="space-y-2">
           {servicesWithAmount.map((row, idx) => (
-            <div key={row.id} className="relative grid grid-cols-12 gap-3 items-center pr-6">
-              <div className="col-span-12 md:col-span-1 text-sm md:text-[13px] flex items-center">{idx + 1}</div>
+            <div
+              key={row.id}
+              className="relative grid grid-cols-12 gap-3 items-center pr-6"
+            >
+              <div className="col-span-12 md:col-span-1 text-sm md:text-[13px] flex items-center">
+                {idx + 1}
+              </div>
 
               <div className="col-span-12 md:col-span-6">
                 <input
                   type="text"
                   value={row.description}
-                  onChange={(e) => handleServiceChange(row.id, "description", e.target.value)}
+                  onChange={(e) =>
+                    handleServiceChange(row.id, "description", e.target.value)
+                  }
                   className="w-full border border-slate-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-slate-500"
                   placeholder={`Description ${idx + 1}`}
                 />
@@ -269,7 +297,9 @@ export default function EditBill() {
                 <input
                   type="number"
                   value={row.qty}
-                  onChange={(e) => handleServiceChange(row.id, "qty", e.target.value)}
+                  onChange={(e) =>
+                    handleServiceChange(row.id, "qty", e.target.value)
+                  }
                   className="w-full border border-slate-300 rounded-md px-2 py-1.5 text-sm text-right focus:outline-none focus:ring-1 focus:ring-slate-500"
                   min="0"
                 />
@@ -279,7 +309,9 @@ export default function EditBill() {
                 <input
                   type="number"
                   value={row.rate}
-                  onChange={(e) => handleServiceChange(row.id, "rate", e.target.value)}
+                  onChange={(e) =>
+                    handleServiceChange(row.id, "rate", e.target.value)
+                  }
                   className="w-full border border-slate-300 rounded-md px-2 py-1.5 text-sm text-right focus:outline-none focus:ring-1 focus:ring-slate-500"
                   min="0"
                   step="0.01"
@@ -298,7 +330,11 @@ export default function EditBill() {
                 onClick={() => removeServiceRow(row.id)}
                 className="absolute right-0 top-1/2 -translate-y-1/2 text-xs text-red-500 hover:text-red-600 disabled:text-slate-300"
                 disabled={services.length === 1}
-                title={services.length === 1 ? "At least one row required" : "Remove item"}
+                title={
+                  services.length === 1
+                    ? "At least one row required"
+                    : "Remove item"
+                }
               >
                 ✕
               </button>
@@ -309,16 +345,23 @@ export default function EditBill() {
         {/* Mobile-friendly rows */}
         <div className="md:hidden space-y-2">
           {servicesWithAmount.map((row, idx) => (
-            <div key={`m-${row.id}`} className="border border-slate-100 rounded-md p-2">
+            <div
+              key={`m-${row.id}`}
+              className="border border-slate-100 rounded-md p-2"
+            >
               <div className="flex justify-between items-center text-sm mb-2">
                 <div>Sr. {idx + 1}</div>
-                <div className="text-right font-semibold">₹ {row.lineAmount.toFixed(2)}</div>
+                <div className="text-right font-semibold">
+                  ₹ {row.lineAmount.toFixed(2)}
+                </div>
               </div>
               <div className="mb-2">
                 <input
                   type="text"
                   value={row.description}
-                  onChange={(e) => handleServiceChange(row.id, "description", e.target.value)}
+                  onChange={(e) =>
+                    handleServiceChange(row.id, "description", e.target.value)
+                  }
                   className="w-full border border-slate-300 rounded-md px-2 py-1 text-sm"
                   placeholder={`Description ${idx + 1}`}
                 />
@@ -327,14 +370,18 @@ export default function EditBill() {
                 <input
                   type="number"
                   value={row.qty}
-                  onChange={(e) => handleServiceChange(row.id, "qty", e.target.value)}
+                  onChange={(e) =>
+                    handleServiceChange(row.id, "qty", e.target.value)
+                  }
                   className="w-full border border-slate-300 rounded-md px-2 py-1 text-sm text-right"
                   min="0"
                 />
                 <input
                   type="number"
                   value={row.rate}
-                  onChange={(e) => handleServiceChange(row.id, "rate", e.target.value)}
+                  onChange={(e) =>
+                    handleServiceChange(row.id, "rate", e.target.value)
+                  }
                   className="w-full border border-slate-300 rounded-md px-2 py-1 text-sm text-right"
                   min="0"
                   step="0.01"
