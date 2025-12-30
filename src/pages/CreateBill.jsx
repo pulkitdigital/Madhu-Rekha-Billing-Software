@@ -72,6 +72,7 @@ export default function CreateBill() {
       prev.length === 1 ? prev : prev.filter((row) => row.id !== id)
     );
   };
+  const [isSaving, setIsSaving] = useState(false);
 
   // ---------- NUMERIC DERIVED VALUES ----------
 
@@ -98,56 +99,123 @@ export default function CreateBill() {
 
   const dateText = form.date || "__________";
 
+  // const handleSave = async () => {
+  //   // remove internal-only fields (id, lineAmount) before sending
+
+  //   if (!form.patientName.trim()) {
+  //     alert("Patient name is required");
+  //     return;
+  //   }
+
+  //   if (!form.address.trim()) {
+  //     alert("Address is required");
+  //     return;
+  //   }
+
+  //   if (!form.date) {
+  //     alert("Date is required");
+  //     return;
+  //   }
+
+  //   const hasEmptyDescription = servicesWithAmount.some(
+  //     (s) => !s.description.trim()
+  //   );
+
+  //   if (hasEmptyDescription) {
+  //     alert("All service descriptions are required");
+  //     return;
+  //   }
+  //   const cleanedServices = servicesWithAmount.map(
+  //     ({ id, lineAmount, ...rest }) => rest
+  //   );
+
+  //   const payload = {
+  //     ...form,
+  //     pay: formattedPay,
+  //     services: cleanedServices,
+  //     total: formattedTotal,
+  //     balance: formattedBalance,
+  //   };
+
+  //   try {
+  //     const result = await apiFetch("/api/bills", {
+  //       method: "POST",
+  //       body: JSON.stringify(payload),
+  //     });
+
+  //     const billId = result.bill.id;
+  //     alert(`Bill created. ID: ${billId}`);
+  //     navigate(`/bills/${billId}`);
+  //   } catch (err) {
+  //     alert(err.message);
+  //   }
+  // };
+
   const handleSave = async () => {
-    // remove internal-only fields (id, lineAmount) before sending
-    if (!form.patientName.trim()) {
-      alert("Patient name is required");
-      return;
-    }
+  // ⛔ hard stop for double / rapid clicks
+  if (isSaving) return;
 
-    if (!form.address.trim()) {
-      alert("Address is required");
-      return;
-    }
+  // ---------- VALIDATIONS ----------
+  if (!form.patientName.trim()) {
+    alert("Patient name is required");
+    return;
+  }
 
-    if (!form.date) {
-      alert("Date is required");
-      return;
-    }
+  if (!form.address.trim()) {
+    alert("Address is required");
+    return;
+  }
 
-    const hasEmptyDescription = servicesWithAmount.some(
-      (s) => !s.description.trim()
-    );
+  if (!form.date) {
+    alert("Date is required");
+    return;
+  }
 
-    if (hasEmptyDescription) {
-      alert("All service descriptions are required");
-      return;
-    }
-    const cleanedServices = servicesWithAmount.map(
-      ({ id, lineAmount, ...rest }) => rest
-    );
+  const hasEmptyDescription = servicesWithAmount.some(
+    (s) => !s.description.trim()
+  );
 
-    const payload = {
-      ...form,
-      pay: formattedPay,
-      services: cleanedServices,
-      total: formattedTotal,
-      balance: formattedBalance,
-    };
+  if (hasEmptyDescription) {
+    alert("All service descriptions are required");
+    return;
+  }
 
-    try {
-      const result = await apiFetch("/api/bills", {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
+  // ---------- LOCK SUBMISSION ----------
+  setIsSaving(true);
 
-      const billId = result.bill.id;
-      alert(`Bill created. ID: ${billId}`);
-      navigate(`/bills/${billId}`);
-    } catch (err) {
-      alert(err.message);
-    }
+  // ---------- CLEAN PAYLOAD ----------
+  const cleanedServices = servicesWithAmount.map(
+    ({ id, lineAmount, ...rest }) => rest
+  );
+
+  const payload = {
+    ...form,
+    pay: formattedPay,
+    services: cleanedServices,
+    total: formattedTotal,
+    balance: formattedBalance,
   };
+
+  try {
+    const result = await apiFetch("/api/bills", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+
+    const billId = result?.bill?.id;
+    if (!billId) {
+      throw new Error("Bill created but ID not returned");
+    }
+
+    navigate(`/bills/${billId}`);
+  } catch (err) {
+    alert(err.message || "Failed to create bill");
+  } finally {
+    // ✅ unlock ONLY after API finishes
+    setIsSaving(false);
+  }
+};
+
 
   const renderPaymentDetailsFields = () => {
     const mode = form.paymentMode;
@@ -924,13 +992,21 @@ export default function CreateBill() {
             >
               Clear
             </button>
-            <button
+            {/* <button
               type="button"
               className="inline-flex items-center px-4 py-1.5 rounded-md text-sm font-medium bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-60"
               onClick={handleSave}
               disabled={total <= 0}
             >
               Save &amp; Generate Receipt
+            </button> */}
+            <button
+              type="button"
+              className="inline-flex items-center px-4 py-1.5 rounded-md text-sm font-medium bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-60 disabled:cursor-not-allowed"
+              onClick={handleSave}
+              disabled={total <= 0 || isSaving}
+            >
+              {isSaving ? "Processing..." : "Save & Generate Receipt"}
             </button>
           </div>
         </div>
