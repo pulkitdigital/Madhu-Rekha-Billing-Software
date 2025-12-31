@@ -2321,7 +2321,7 @@ export default function BillDetail() {
                   <th className="px-2 py-1 text-left">Cheque / UPI Date</th>
                   <th className="px-2 py-1 text-left">Cheque No. / UPI ID</th>
                   <th className="px-2 py-1 text-left">Bank</th>
-                  <th className="px-2 py-1 text-left">Ref No.</th>
+                  <th className="px-2 py-1 text-left">UTR NO./REF NO.</th>
                   <th className="px-2 py-1 text-left">Receipt No.</th>
                   <th className="px-2 py-1 text-center">Actions</th>
                 </tr>
@@ -2433,7 +2433,7 @@ export default function BillDetail() {
                   <th className="px-2 py-1 text-left">Cheque / UPI Date</th>
                   <th className="px-2 py-1 text-left">Cheque No. / UPI ID</th>
                   <th className="px-2 py-1 text-left">Bank</th>
-                  <th className="px-2 py-1 text-left">Ref No.</th>
+                  <th className="px-2 py-1 text-left">UTR NO./REF NO.</th>
                   <th className="px-2 py-1 text-left">Refund No.</th>
                   <th className="px-2 py-1 text-center">Actions</th>
                 </tr>
@@ -2893,7 +2893,7 @@ function PendingPaymentForm({ billId, pending, onSuccess }) {
 
       <div>
         <label className="block text-slate-600 mb-1 text-[11px]">
-          Ref No. (optional)
+          UTR NO./REF NO. (optional)
         </label>
         <input
           type="text"
@@ -3032,7 +3032,7 @@ function RefundForm({ billId, maxRefund, onSuccess }) {
 
       <div>
         <label className="block text-slate-600 mb-1 text-[11px]">
-          Ref No. (optional)
+          UTR NO./REF NO. (optional)
         </label>
         <input
           type="text"
