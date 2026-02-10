@@ -7,8 +7,6 @@ import Dashboard from "./pages/Dashboard";
 import EditBill from "./pages/EditBill.jsx";
 import EditPayment from "./pages/EditPayment.jsx";
 import EditRefund from "./pages/EditRefund.jsx";
-import InvoicePrintPage from "./pages/InvoicePrintPage.jsx";
-import ReceiptPrintPage from "./pages/ReceiptPrintPage.jsx";
 import Profile from "./pages/Profile.jsx"; // added
 
 export default function App() {
