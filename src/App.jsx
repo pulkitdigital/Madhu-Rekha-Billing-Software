@@ -7,27 +7,23 @@ import Dashboard from "./pages/Dashboard";
 import EditBill from "./pages/EditBill.jsx";
 import EditPayment from "./pages/EditPayment.jsx";
 import EditRefund from "./pages/EditRefund.jsx";
-import Profile from "./pages/Profile.jsx"; // added
+import Profile from "./pages/Profile.jsx";
+import Payments from "./pages/Payments.jsx"; // ✅ NEW
 
 export default function App() {
   const location = useLocation();
 
-  // /print/... routes use a minimal layout (no sidebar)
   const isPrintRoute = location.pathname.startsWith("/print/");
 
   if (isPrintRoute) {
     return (
       <Routes>
         <Route path="/print/invoice/:id" element={<InvoicePrintPage />} />
-        <Route
-          path="/print/receipt/:paymentId"
-          element={<ReceiptPrintPage />}
-        />
+        <Route path="/print/receipt/:paymentId" element={<ReceiptPrintPage />} />
       </Routes>
     );
   }
 
-  // Normal app layout with sidebar
   return (
     <div className="min-h-screen bg-slate-100 flex">
       {/* Sidebar */}
@@ -77,7 +73,20 @@ export default function App() {
             All Bills
           </NavLink>
 
-          {/* Profile / Clinic settings */}
+          {/* ✅ NEW: Payments & Refunds */}
+          <NavLink
+            to="/payments"
+            className={({ isActive }) =>
+              `block px-3 py-2 rounded-md ${
+                isActive
+                  ? "bg-slate-900 text-white"
+                  : "text-slate-700 hover:bg-slate-100"
+              }`
+            }
+          >
+            Payments & Refunds
+          </NavLink>
+
           <NavLink
             to="/profile"
             className={({ isActive }) =>
@@ -96,7 +105,6 @@ export default function App() {
       {/* Main content */}
       <main className="flex-1 p-6">
         <Routes>
-          {/* Default -> Dashboard */}
           <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/new-bill" element={<CreateBill />} />
@@ -105,9 +113,10 @@ export default function App() {
           <Route path="/bills/:id/edit" element={<EditBill />} />
           <Route path="/payments/:id/edit" element={<EditPayment />} />
           <Route path="/refunds/:id/edit" element={<EditRefund />} />
-
-          {/* Profile page */}
           <Route path="/profile" element={<Profile />} />
+          
+          {/* ✅ NEW: Payments & Refunds Page */}
+          <Route path="/payments" element={<Payments />} />
         </Routes>
       </main>
     </div>
