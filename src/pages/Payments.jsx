@@ -141,7 +141,7 @@ export default function Payments() {
             </button>
 
             {showDateMenu && (
-              <div className="absolute right-0 mt-1.5 w-64 bg-white border border-slate-200 rounded-lg shadow-lg z-50 p-2 space-y-1">
+              <div className="absolute right-0 mt-1.5 w-72 bg-white border border-slate-200 rounded-lg shadow-lg z-50 p-2 space-y-1">
 
                 <button
                   onClick={handleDownloadAll}

@@ -1208,7 +1208,7 @@ export default function Profile() {
                       <button
                         type="button"
                         onClick={() => handleDeleteItem(item.id, item.name)}
-                        className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-100 text-red-400 hover:text-red-600 transition-all"
+                        className="p-1 rounded hover:bg-red-100 text-red-600 hover:text-red-800 transition-all"
                         title="Delete item"
                       >
                         <Trash2 className="w-4 h-4" />
