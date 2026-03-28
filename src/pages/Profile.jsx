@@ -48,7 +48,7 @@
 //   const fetchProfile = async () => {
 //     setLoading(true);
 //     try {
-//       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+//       const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
 //       const res = await fetch(`${API_URL}/api/profile`);
 //       if (!res.ok) throw new Error("Failed to fetch profile");
 //       const data = await res.json();
@@ -159,7 +159,7 @@
 //     }
 
 //     try {
-//       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+//       const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
 //       const res = await fetch(`${API_URL}/api/profile`, {
 //         method: "PUT",
 //         headers: { "Content-Type": "application/json" },
@@ -657,7 +657,7 @@ export default function Profile() {
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+      const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
       const res = await fetch(`${API_URL}/api/profile`);
       if (!res.ok) throw new Error("Failed to fetch profile");
       const data = await res.json();
@@ -736,7 +736,7 @@ export default function Profile() {
   // ─── Service Items API calls ───────────────────────────────────────────────
   const fetchServiceItems = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+      const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
       const res = await fetch(`${API_URL}/api/service-items`);
       if (!res.ok) throw new Error("Failed to fetch service items");
       const data = await res.json();
@@ -760,7 +760,7 @@ export default function Profile() {
     setItemsMessage({ type: "", text: "" });
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+      const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
       const res = await fetch(`${API_URL}/api/service-items`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -787,7 +787,7 @@ export default function Profile() {
     if (!window.confirm(`Delete "${name}"?`)) return;
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+      const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
       const res = await fetch(`${API_URL}/api/service-items/${id}`, {
         method: "DELETE",
       });
@@ -826,7 +826,7 @@ export default function Profile() {
     }
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+      const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
       const res = await fetch(`${API_URL}/api/profile`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

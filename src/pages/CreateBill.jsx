@@ -1261,7 +1261,7 @@ export default function CreateBill() {
   useEffect(() => {
     const fetchServiceItems = async () => {
       try {
-        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+        const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
         const res = await fetch(`${API_URL}/api/service-items`);
         if (!res.ok) return;
         const data = await res.json();
