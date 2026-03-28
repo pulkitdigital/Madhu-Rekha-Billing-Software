@@ -40,7 +40,7 @@ const isElectron = window.location.protocol === "file:";
 
 export const API_BASE = isElectron
   ? "http://localhost:4000"                          // Electron: local Express
-  : import.meta.env.VITE_API_BASE_URL || "http://localhost:4000"; // Website: .env se
+  : import.meta.env.VITE_API_BASE_URL || "https://madhu-rekha-billing-backend-1.onrender.com"; // Website: Render URL
 
 export async function apiFetch(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
