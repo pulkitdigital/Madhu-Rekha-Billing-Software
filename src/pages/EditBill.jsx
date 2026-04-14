@@ -135,6 +135,7 @@ export default function EditBill() {
       remarks: form.remarks,
       services: cleanedServices,
       total: formattedTotal,
+      dateManuallySet: true,
     };
 
     try {
