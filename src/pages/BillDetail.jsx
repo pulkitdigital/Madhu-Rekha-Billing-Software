@@ -83,7 +83,7 @@ export default function BillDetail() {
   //         procedureConfirmed: true
   //       })
   //     });
-      
+
   //     alert("Treatment marked as completed!");
   //     loadBill();
   //   } catch (err) {
@@ -94,37 +94,35 @@ export default function BillDetail() {
   // };
 
   const handleMarkAsCompleted = async () => {
-  const ok = window.confirm(
-    "Mark this treatment as completed? Invoice will be available for download."
-  );
-  if (!ok) return;
+    const ok = window.confirm(
+      "Mark this treatment as completed? Invoice will be available for download.",
+    );
+    if (!ok) return;
 
-  setMarkingCompleted(true);
+    setMarkingCompleted(true);
 
-  try {
-    await apiFetch(`/api/bills/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify({ procedureConfirmed: true }),
-    });
+    try {
+      await apiFetch(`/api/bills/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ procedureConfirmed: true }),
+      });
 
-    // 🔥 OPTIMISTIC UI UPDATE (INSTANT BUTTON)
-    setBill((prev) => ({
-      ...prev,
-      procedureConfirmed: true,
-      balance: 0,
-      status: "PAID",
-    }));
+      // 🔥 OPTIMISTIC UI UPDATE (INSTANT BUTTON)
+      setBill((prev) => ({
+        ...prev,
+        procedureConfirmed: true,
+        balance: 0,
+        status: "PAID",
+      }));
 
-    // 🔁 Optional: refresh once to sync everything
-    setTimeout(loadBill, 500);
-
-  } catch (err) {
-    alert(err.message || "Failed to mark as completed");
-  } finally {
-    setMarkingCompleted(false);
-  }
-};
-
+      // 🔁 Optional: refresh once to sync everything
+      setTimeout(loadBill, 500);
+    } catch (err) {
+      alert(err.message || "Failed to mark as completed");
+    } finally {
+      setMarkingCompleted(false);
+    }
+  };
 
   useEffect(() => {
     loadBill();
@@ -137,14 +135,14 @@ export default function BillDetail() {
   const isPaid = Number(bill.balance ?? 0) <= 0;
   const hasNetPaid = Number(bill.paid ?? 0) > 0;
   const isProcedureCompleted = bill.procedureConfirmed === true;
-  
+
   // Debug: Log the values
   console.log("Bill data:", {
     id: bill.id,
     procedureConfirmed: bill.procedureConfirmed,
     isProcedureCompleted,
     balance: bill.balance,
-    isPaid
+    isPaid,
   });
 
   return (
@@ -157,11 +155,15 @@ export default function BillDetail() {
               isProcedureCompleted
                 ? "bg-emerald-50 text-emerald-700"
                 : isPaid
-                ? "bg-blue-50 text-blue-700"
-                : "bg-amber-50 text-amber-700"
+                  ? "bg-blue-50 text-blue-700"
+                  : "bg-amber-50 text-amber-700"
             }`}
           >
-            {isProcedureCompleted ? "Treatment Completed" : isPaid ? "Paid in Full" : "Payment Pending"}
+            {isProcedureCompleted
+              ? "Treatment Completed"
+              : isPaid
+                ? "Paid in Full"
+                : "Payment Pending"}
           </span>
         </h3>
 
@@ -172,7 +174,7 @@ export default function BillDetail() {
               onClick={() =>
                 window.open(
                   `${API_BASE}/api/bills/${bill.id}/full-payment-pdf`,
-                  "_blank"
+                  "_blank",
                 )
               }
               className="px-3 py-1.5 text-xs rounded border border-blue-400 text-blue-700 hover:bg-blue-50"
@@ -180,7 +182,7 @@ export default function BillDetail() {
               Download Invoice
             </button>
           )}
-          
+
           {!isProcedureCompleted && (
             <button
               type="button"
@@ -317,40 +319,45 @@ export default function BillDetail() {
                   const chequeUpiDate = isCheque
                     ? p.chequeDate || p.cheque_date || "-"
                     : isUPI
-                    ? p.upiDate || p.upi_date || "-"
-                    : isBank
-                    ? p.transferDate || p.transfer_date || "-"
-                    : "-";
+                      ? p.upiDate || p.upi_date || "-"
+                      : isBank
+                        ? p.transferDate || p.transfer_date || "-"
+                        : "-";
 
                   const chequeUpiRef = isCheque
                     ? p.chequeNumber || p.cheque_no || p.chequeNum || "-"
                     : isUPI
-                    ? p.upiId || p.upi_id || "-"
-                    : isBank
-                    ? "-"
-                    : "-";
+                      ? p.upiId || p.upi_id || "-"
+                      : isBank
+                        ? "-"
+                        : "-";
 
                   const bank =
                     isCheque || isBank
                       ? p.bankName || p.bank || p.bank_name || "-"
                       : isUPI
-                      ? p.drawnOn || p.platform || p.upiPlatform || "-"
-                      : "-";
+                        ? p.drawnOn || p.platform || p.upiPlatform || "-"
+                        : "-";
 
                   const refNo = isBank
                     ? p.referenceNo || p.refNo || p.reference_no || "-"
                     : isCheque
-                    ? p.referenceNo || p.refNo || "-"
-                    : isUPI
-                    ? p.referenceNo || p.refNo || p.transactionId || "-"
-                    : p.referenceNo || "-";
+                      ? p.referenceNo || p.refNo || "-"
+                      : isUPI
+                        ? p.referenceNo || p.refNo || p.transactionId || "-"
+                        : p.referenceNo || "-";
 
                   return (
                     <tr
                       key={p.id}
                       className="border-b border-slate-100 last:border-0"
                     >
-                      <td className="px-2 py-1">{formatToDDMMYYYY(p.date)}</td>
+                      {/* <td className="px-2 py-1">{formatToDDMMYYYY(p.date)}</td> */}
+                      <td className="px-2 py-1">
+                        {formatToDDMMYYYY(
+                          p.upiDate || p.chequeDate || p.transferDate || p.date,
+                        )}
+                      </td>
                       <td className="px-2 py-1 text-right">
                         ₹ {Number(p.amount).toFixed(2)}
                       </td>
@@ -368,7 +375,7 @@ export default function BillDetail() {
                           onClick={() =>
                             window.open(
                               `${API_BASE}/api/payments/${p.id}/receipt-html-pdf`,
-                              "_blank"
+                              "_blank",
                             )
                           }
                           className="px-2 py-0.5 text-[11px] rounded border border-slate-300 hover:bg-slate-50"
@@ -380,7 +387,7 @@ export default function BillDetail() {
                           type="button"
                           onClick={() => {
                             const ok = window.confirm(
-                              "Are you sure you want to edit this payment receipt?"
+                              "Are you sure you want to edit this payment receipt?",
                             );
                             if (ok) {
                               window.location.href = `/payments/${p.id}/edit`;
@@ -429,40 +436,45 @@ export default function BillDetail() {
                   const chequeUpiDate = isCheque
                     ? r.chequeDate || r.cheque_date || "-"
                     : isUPI
-                    ? r.upiDate || r.upi_date || "-"
-                    : isBank
-                    ? r.transferDate || r.transfer_date || "-"
-                    : "-";
+                      ? r.upiDate || r.upi_date || "-"
+                      : isBank
+                        ? r.transferDate || r.transfer_date || "-"
+                        : "-";
 
                   const chequeUpiRef = isCheque
                     ? r.chequeNumber || r.cheque_no || r.chequeNum || "-"
                     : isUPI
-                    ? r.upiId || r.upi_id || "-"
-                    : isBank
-                    ? "-"
-                    : "-";
+                      ? r.upiId || r.upi_id || "-"
+                      : isBank
+                        ? "-"
+                        : "-";
 
                   const bank =
                     isCheque || isBank
                       ? r.bankName || r.bank || r.bank_name || "-"
                       : isUPI
-                      ? r.drawnOn || r.platform || r.upiPlatform || "-"
-                      : "-";
+                        ? r.drawnOn || r.platform || r.upiPlatform || "-"
+                        : "-";
 
                   const refNo = isBank
                     ? r.referenceNo || r.refNo || r.reference_no || "-"
                     : isCheque
-                    ? r.referenceNo || r.refNo || "-"
-                    : isUPI
-                    ? r.referenceNo || r.refNo || r.transactionId || "-"
-                    : r.referenceNo || "-";
+                      ? r.referenceNo || r.refNo || "-"
+                      : isUPI
+                        ? r.referenceNo || r.refNo || r.transactionId || "-"
+                        : r.referenceNo || "-";
 
                   return (
                     <tr
                       key={r.id}
                       className="border-b border-slate-100 last:border-0"
                     >
-                      <td className="px-2 py-1">{formatToDDMMYYYY(r.date)}</td>
+                      {/* <td className="px-2 py-1">{formatToDDMMYYYY(r.date)}</td> */}
+                      <td className="px-2 py-1">
+                        {formatToDDMMYYYY(
+                          r.upiDate || r.chequeDate || r.transferDate || r.date,
+                        )}
+                      </td>
                       <td className="px-2 py-1 text-right">
                         ₹ {Number(r.amount).toFixed(2)}
                       </td>
@@ -480,7 +492,7 @@ export default function BillDetail() {
                           onClick={() =>
                             window.open(
                               `${API_BASE}/api/refunds/${r.id}/refund-html-pdf`,
-                              "_blank"
+                              "_blank",
                             )
                           }
                           className="px-2 py-0.5 text-[11px] rounded border border-slate-300 hover:bg-slate-50"
@@ -492,7 +504,7 @@ export default function BillDetail() {
                           type="button"
                           onClick={() => {
                             const ok = window.confirm(
-                              "Are you sure you want to edit this refund receipt?"
+                              "Are you sure you want to edit this refund receipt?",
                             );
                             if (ok) {
                               window.location.href = `/refunds/${r.id}/edit`;

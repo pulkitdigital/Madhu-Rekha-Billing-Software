@@ -92,7 +92,9 @@ export default function BillsList() {
       }
 
       // ✅ Format date to DD/MM/YYYY
-      const formattedDate = formatDateToDDMMYYYY(lastPaymentDate);
+      //const formattedDate = formatDateToDDMMYYYY(lastPaymentDate);
+
+      const formattedDate = formatDateToDDMMYYYY(bill.date);
 
       return {
         ...bill,
